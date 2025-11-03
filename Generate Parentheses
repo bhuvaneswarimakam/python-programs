@@ -1,0 +1,30 @@
+class Solution(object):
+    def generateParenthesis(self, n):
+        """
+        :type n: int
+        :rtype: List[str]
+        """
+        result = []
+
+        # Helper function for backtracking
+        def backtrack(current_string, open_count, close_count):
+            # Base case: if we have used all open and close parentheses
+            if open_count == n and close_count == n:
+                result.append(current_string)
+                return
+
+            # Recursive case 1: Add an opening parenthesis
+            # We can add an opening parenthesis if we haven't used all 'n' of them
+            if open_count < n:
+                backtrack(current_string + "(", open_count + 1, close_count)
+
+            # Recursive case 2: Add a closing parenthesis
+            # We can add a closing parenthesis only if there are more open parentheses
+            # than closing parentheses in the current string (to maintain well-formedness)
+            if close_count < open_count:
+                backtrack(current_string + ")", open_count, close_count + 1)
+
+        # Start the backtracking process
+        backtrack("", 0, 0)
+        return result
+        
