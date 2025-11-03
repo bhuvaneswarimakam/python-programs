@@ -1,0 +1,37 @@
+import heapq
+
+# Definition for singly-linked list.
+class ListNode(object):
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+class Solution(object):
+    def mergeKLists(self, lists):
+        """
+        :type lists: List[Optional[ListNode]]
+        :rtype: Optional[ListNode]
+        """
+        min_heap = []
+        
+        # Add the head of each list to the min-heap
+        for i, head in enumerate(lists):
+            if head:
+                # Store (value, list_index, ListNode_object) in the heap
+                # The list_index is used to break ties if values are equal,
+                # ensuring stable sorting and preventing comparison errors with ListNode objects directly.
+                heapq.heappush(min_heap, (head.val, i, head))
+        
+        dummy_head = ListNode()
+        current = dummy_head
+        
+        while min_heap:
+            val, list_index, node = heapq.heappop(min_heap)
+            
+            current.next = node
+            current = current.next
+            
+            if node.next:
+                heapq.heappush(min_heap, (node.next.val, list_index, node.next))
+                
+        return dummy_head.next
